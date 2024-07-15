@@ -1,0 +1,67 @@
+alias gl="git log --graph --pretty=format:'%C(yellow){%h}%Creset%C(cyan)%d%Creset %C(magenta)%ar%Creset %Cgreen%aN%Creset: %s'"
+alias gl3="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gl2="git log --oneline --abbrev-commit --all --graph --decorate --color"
+alias gl1="git log --pretty=oneline -n 20 --graph"
+alias glw="git log -p --word-diff"
+alias ga="git add --ignore-removal"
+alias gad="git add --ignore-removal -u ."
+alias gap="ga -p"
+alias gud="git add -u"
+alias gb="git branch"
+alias gba="git branch -a"
+alias gbr="git branch -r"
+alias gs="git status"
+alias gco="git checkout"
+alias gd="git diff"
+alias gdc="git diff --cached"
+alias grc="git rm --cached"
+alias gc="git commit"
+alias gam="gc -am"
+alias gcm="gc -m"
+alias gf="git fetch"
+alias gfl="git fetch origin master:master"
+alias gp="git pull"
+alias gpp="git pull --prune && git fetch -f --tags --prune-tags"
+alias gpr="git pull --rebase -p"
+alias gps="git push origin -u"
+alias gcp="git cherry-pick"
+alias br,="gb | egrep -o '\*\s(.*)' | tr -d '\n' | tr -d '* '"
+alias br="gb | egrep -o '\*\s(.*)' | tr -d '\n' | tr -d '* ' | pbcopy"
+alias edit_bash_profile="vim ~/.bash_profile && source ~/.bash_profile"
+alias histnum="history | awk '{a[$1]++}END{for(i in a){print a[i] \" \" i}}' | sort -rn | head"
+alias psa="ps -jef"
+alias ll="ls -Glah"
+alias llc="ls | wc -l"
+alias wip='git commit --no-verify -m "WIP"'
+alias edit='git commit --amend --no-edit'
+alias tree='tree -I node_modules'
+export ACTOR=kaborso
+export JIRA_URL="rentpath.atlassian.net"
+
+
+helm_debug() {
+  helm dependency update
+  helm template --debug .
+  helm lint
+}
+
+k8s_describe_pod() {
+  kubectl describe pod `kubectl get pods -n qa --context dve2-aks-nonprod | grep $1 | head -n1 | awk '{print $1}'` -n qa --context dve2-aks-nonprod | grep "Image:.*$1" | head -n1 | awk '{print $2}' | sed "s/ghcr.io\/rentpath\/$1://"
+}
+
+export GPG_TTY=$(tty)
+
+fix() {
+  git rebase -i HEAD~$1
+}
+
+
+update_branch() {
+  gco main && gpp && gco - && git rebase main
+}
+
+# update_branch() {
+#  #TRUNK=$(git branch -a | grep main ? main : master)
+#  gco ${TRUNK} && gpp && gco - && git rebase ${TRUNK}
+# }
+

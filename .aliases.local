@@ -1,3 +1,4 @@
+alias emacs="open -n -a Emacs.app"
 alias gl="git log --graph --pretty=format:'%C(yellow){%h}%Creset%C(cyan)%d%Creset %C(magenta)%ar%Creset %Cgreen%aN%Creset: %s'"
 alias gl3="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gl2="git log --oneline --abbrev-commit --all --graph --decorate --color"
@@ -27,17 +28,27 @@ alias gps="git push origin -u"
 alias gcp="git cherry-pick"
 alias br,="gb | egrep -o '\*\s(.*)' | tr -d '\n' | tr -d '* '"
 alias br="gb | egrep -o '\*\s(.*)' | tr -d '\n' | tr -d '* ' | pbcopy"
-alias edit_bash_profile="vim ~/.bash_profile && source ~/.bash_profile"
 alias histnum="history | awk '{a[$1]++}END{for(i in a){print a[i] \" \" i}}' | sort -rn | head"
+
 alias psa="ps -jef"
+
 alias ll="ls -Glah"
 alias llc="ls | wc -l"
-alias wip='git commit --no-verify -m "WIP"'
+alias tree='tree -aI node_modules'
+
+alias edit_bash_profile="vim ~/.bash_profile && source ~/.bash_profile"
+alias wip='git commit --no-verify -m "wip"'
 alias edit='git commit --amend --no-edit'
-alias tree='tree -I node_modules'
+
+alias emacs='open -n -a Emacs.app'
+# alias emacs='emacsclient'
+
 export ACTOR=kaborso
+export GPG_TTY=$(tty)
 export JIRA_URL="rentpath.atlassian.net"
 
+# start emacs in the background
+/opt/homebrew/bin/emacs --daemon
 
 helm_debug() {
   helm dependency update
@@ -49,12 +60,9 @@ k8s_describe_pod() {
   kubectl describe pod `kubectl get pods -n qa --context dve2-aks-nonprod | grep $1 | head -n1 | awk '{print $1}'` -n qa --context dve2-aks-nonprod | grep "Image:.*$1" | head -n1 | awk '{print $2}' | sed "s/ghcr.io\/rentpath\/$1://"
 }
 
-export GPG_TTY=$(tty)
-
 fix() {
   git rebase -i HEAD~$1
 }
-
 
 update_branch() {
   gco main && gpp && gco - && git rebase main
@@ -64,4 +72,3 @@ update_branch() {
 #  #TRUNK=$(git branch -a | grep main ? main : master)
 #  gco ${TRUNK} && gpp && gco - && git rebase ${TRUNK}
 # }
-

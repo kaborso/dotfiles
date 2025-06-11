@@ -48,7 +48,9 @@ export GPG_TTY=$(tty)
 export JIRA_URL="rentpath.atlassian.net"
 
 # start emacs in the background
-/opt/homebrew/bin/emacs --daemon
+if [[ $(ps aux | grep "/opt/homebrew/bin/emacs --daemon" | sed '/grep/d' | wc -l) -eq 0  ]]; then
+  /opt/homebrew/bin/emacs --daemon
+fi
 
 helm_debug() {
   helm dependency update

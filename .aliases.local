@@ -92,3 +92,8 @@ update_branch() {
 #  #TRUNK=$(git branch -a | grep main ? main : master)
 #  gco ${TRUNK} && gpp && gco - && git rebase ${TRUNK}
 # }
+
+# FORMER BASH PROMPT
+# export PS1="\h:\W \u\[\e[32m\]\`parse_git_branch\`\[\e[m\] \@ \\$ "
+
+export PROMPT="%n@%m %F{240}[%D{%d/%m/%y %H:%M:%S}]%f %~ "

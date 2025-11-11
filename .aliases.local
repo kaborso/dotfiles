@@ -52,6 +52,14 @@ if [[ $(ps aux | grep "/opt/homebrew/bin/emacs --daemon" | sed '/grep/d' | wc -l
   /opt/homebrew/bin/emacs --daemon
 fi
 
+# TODO: loop over list or (use launchtld even)
+PROCESS_STRING="/opt/homebrew/bin/limactl"
+if [[ $(ps aux | grep "${PROCESS_STRING}" | sed '/grep/d' | wc -l) -eq 0  ]]; then
+  bash -c "${PROCESS_STRING} start"
+fi
+
+alias docker="lima nerdctl"
+
 helm_debug() {
   helm dependency update
   helm template --debug .
@@ -61,6 +69,16 @@ helm_debug() {
 k8s_describe_pod() {
   kubectl describe pod `kubectl get pods -n qa --context dve2-aks-nonprod | grep $1 | head -n1 | awk '{print $1}'` -n qa --context dve2-aks-nonprod | grep "Image:.*$1" | head -n1 | awk '{print $2}' | sed "s/ghcr.io\/rentpath\/$1://"
 }
+
+# find-in {
+#  AFTER=
+#  BEFORE=
+#  DIRECTORY=
+#  PATTERN=
+#  TEXT=
+#
+#  find $DIRECTORY -name $PATTERN -print | xargs -I % cat % | grep -A $AFTER -B $BEFORE $TEXT
+# }
 
 fix() {
   git rebase -i HEAD~$1
